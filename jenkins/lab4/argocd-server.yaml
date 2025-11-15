@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: server
+    app.kubernetes.io/name: argocd-server
+    app.kubernetes.io/part-of: argocd
+  name: argocd-server
+  namespace: argocd
+spec:
+  type: NodePort            # بدل ClusterIP
+  selector:
+    app.kubernetes.io/name: argocd-server
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+      nodePort: 31000       # ده البورت اللي هتدخل منه من جهازك
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 8080
+      # ممكن كمان تحط nodePort هنا لو عايز https على بورت ثابت، مثلاً 9443
+      # nodePort: 9443
+  sessionAffinity: None
